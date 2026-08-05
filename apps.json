@@ -1,0 +1,30 @@
+{
+  "Browsers": [
+    { "Id": "Google.Chrome", "Name": "Google Chrome", "WingetId": "Google.Chrome" },
+    { "Id": "Mozilla.Firefox", "Name": "Mozilla Firefox", "WingetId": "Mozilla.Firefox" },
+    { "Id": "Brave.Brave", "Name": "Brave Browser", "WingetId": "Brave.Brave" }
+  ],
+  "Utilities": [
+    { "Id": "7zip.7zip", "Name": "7-Zip", "WingetId": "7zip.7zip" },
+    { "Id": "Notepad++", "Name": "Notepad++", "WingetId": "Notepad++.Notepad++" },
+    { "Id": "Microsoft.PowerToys", "Name": "Microsoft PowerToys", "WingetId": "Microsoft.PowerToys" },
+    { "Id": "WinDirStat", "Name": "WinDirStat", "WingetId": "WinDirStat.WinDirStat" },
+    { "Id": "Everything", "Name": "Everything (voidtools search)", "WingetId": "voidtools.Everything" }
+  ],
+  "Media": [
+    { "Id": "VideoLAN.VLC", "Name": "VLC Media Player", "WingetId": "VideoLAN.VLC" },
+    { "Id": "OBSProject.OBSStudio", "Name": "OBS Studio", "WingetId": "OBSProject.OBSStudio" }
+  ],
+  "Development": [
+    { "Id": "Git.Git", "Name": "Git", "WingetId": "Git.Git" },
+    { "Id": "Microsoft.VisualStudioCode", "Name": "Visual Studio Code", "WingetId": "Microsoft.VisualStudioCode" },
+    { "Id": "Python.Python.3.12", "Name": "Python 3.12", "WingetId": "Python.Python.3.12" },
+    { "Id": "OpenJS.NodeJS.LTS", "Name": "Node.js LTS", "WingetId": "OpenJS.NodeJS.LTS" },
+    { "Id": "Docker.DockerDesktop", "Name": "Docker Desktop", "WingetId": "Docker.DockerDesktop" }
+  ],
+  "Communication": [
+    { "Id": "Discord.Discord", "Name": "Discord", "WingetId": "Discord.Discord" },
+    { "Id": "SlackTechnologies.Slack", "Name": "Slack", "WingetId": "SlackTechnologies.Slack" },
+    { "Id": "Zoom.Zoom", "Name": "Zoom", "WingetId": "Zoom.Zoom" }
+  ]
+}

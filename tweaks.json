@@ -1,0 +1,272 @@
+{
+  "Performance": [
+    {
+      "Id": "PerfVisualEffects",
+      "Name": "Set Visual Effects to Best Performance",
+      "Description": "Disables animations, shadows, and other UI effects to improve responsiveness on lower-end hardware.",
+      "Category": "Performance",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKCU:\\Control Panel\\Desktop", "Name": "UserPreferencesMask", "Value": [144,18,3,128,16,0,0,0], "ValueType": "Binary" },
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects", "Name": "VisualFXSetting", "Value": 2, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects", "Name": "VisualFXSetting", "Value": 0, "ValueType": "DWord" }
+      ]
+    },
+    {
+      "Id": "PerfPowerPlanUltimate",
+      "Name": "Enable Ultimate Performance Power Plan",
+      "Description": "Unlocks and activates the hidden Ultimate Performance power scheme.",
+      "Category": "Performance",
+      "Apply": [
+        { "Type": "Command", "Command": "powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61" },
+        { "Type": "Command", "Command": "powercfg -setactive e9a42b02-d5df-448d-aa00-03f14749eb61" }
+      ],
+      "Undo": [
+        { "Type": "Command", "Command": "powercfg -setactive 381b4222-f694-41f0-9685-ff5bb260df2e" }
+      ]
+    },
+    {
+      "Id": "PerfDisableNagle",
+      "Name": "Disable Nagle's Algorithm",
+      "Description": "Reduces network latency for real-time applications by disabling TCP packet coalescing.",
+      "Category": "Performance",
+      "Apply": [
+        { "Type": "Command", "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces' | ForEach-Object { Set-ItemProperty -Path $_.PSPath -Name 'TcpAckFrequency' -Value 1 -Type DWord -Force; Set-ItemProperty -Path $_.PSPath -Name 'TCPNoDelay' -Value 1 -Type DWord -Force }" }
+      ],
+      "Undo": [
+        { "Type": "Command", "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces' | ForEach-Object { Remove-ItemProperty -Path $_.PSPath -Name 'TcpAckFrequency' -ErrorAction SilentlyContinue; Remove-ItemProperty -Path $_.PSPath -Name 'TCPNoDelay' -ErrorAction SilentlyContinue }" }
+      ]
+    },
+    {
+      "Id": "PerfDisableHibernation",
+      "Name": "Disable Hibernation",
+      "Description": "Frees disk space equal to your RAM size by disabling the hibernation file.",
+      "Category": "Performance",
+      "Apply": [
+        { "Type": "Command", "Command": "powercfg -h off" }
+      ],
+      "Undo": [
+        { "Type": "Command", "Command": "powercfg -h on" }
+      ]
+    }
+  ],
+  "Privacy": [
+    {
+      "Id": "PrivacyDisableTelemetry",
+      "Name": "Disable Telemetry & Diagnostic Data",
+      "Description": "Sets diagnostic data collection to the minimum level allowed and disables the telemetry service.",
+      "Category": "Privacy",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "Name": "AllowTelemetry", "Value": 0, "ValueType": "DWord" },
+        { "Type": "Service", "Name": "DiagTrack", "Action": "Disable" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "Name": "AllowTelemetry", "Value": 1, "ValueType": "DWord" },
+        { "Type": "Service", "Name": "DiagTrack", "Action": "Enable" }
+      ]
+    },
+    {
+      "Id": "PrivacyDisableAdvertisingId",
+      "Name": "Disable Advertising ID",
+      "Description": "Stops apps from using an advertising ID to personalize ads across apps.",
+      "Category": "Privacy",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo", "Name": "Enabled", "Value": 0, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo", "Name": "Enabled", "Value": 1, "ValueType": "DWord" }
+      ]
+    },
+    {
+      "Id": "PrivacyDisableLocationTracking",
+      "Name": "Disable Location Tracking",
+      "Description": "Turns off location services system-wide.",
+      "Category": "Privacy",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location", "Name": "Value", "Value": "Deny", "ValueType": "String" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location", "Name": "Value", "Value": "Allow", "ValueType": "String" }
+      ]
+    },
+    {
+      "Id": "PrivacyDisableActivityHistory",
+      "Name": "Disable Activity History",
+      "Description": "Stops Windows from tracking and syncing your app/document activity history.",
+      "Category": "Privacy",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System", "Name": "EnableActivityFeed", "Value": 0, "ValueType": "DWord" },
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System", "Name": "PublishUserActivities", "Value": 0, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System", "Name": "EnableActivityFeed", "Value": 1, "ValueType": "DWord" },
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System", "Name": "PublishUserActivities", "Value": 1, "ValueType": "DWord" }
+      ]
+    }
+  ],
+  "Explorer": [
+    {
+      "Id": "ExplorerShowExtensions",
+      "Name": "Show File Extensions",
+      "Description": "Always show file extensions in File Explorer.",
+      "Category": "Explorer",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Name": "HideFileExt", "Value": 0, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Name": "HideFileExt", "Value": 1, "ValueType": "DWord" }
+      ]
+    },
+    {
+      "Id": "ExplorerShowHidden",
+      "Name": "Show Hidden Files",
+      "Description": "Shows hidden files and folders in File Explorer.",
+      "Category": "Explorer",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Name": "Hidden", "Value": 1, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Name": "Hidden", "Value": 2, "ValueType": "DWord" }
+      ]
+    },
+    {
+      "Id": "ExplorerClassicContextMenu",
+      "Name": "Restore Classic Right-Click Menu (Win11)",
+      "Description": "Removes the trimmed-down Windows 11 context menu in favor of the full classic one.",
+      "Category": "Explorer",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32", "Name": "(Default)", "Value": "", "ValueType": "String" }
+      ],
+      "Undo": [
+        { "Type": "Command", "Command": "Remove-Item -Path 'HKCU:\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}' -Recurse -Force -ErrorAction SilentlyContinue" }
+      ]
+    },
+    {
+      "Id": "ExplorerDefaultThisPC",
+      "Name": "Set File Explorer to Open to 'This PC'",
+      "Description": "Changes the default Explorer launch view from Quick Access to This PC.",
+      "Category": "Explorer",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Name": "LaunchTo", "Value": 1, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Name": "LaunchTo", "Value": 2, "ValueType": "DWord" }
+      ]
+    }
+  ],
+  "Debloat": [
+    {
+      "Id": "DebloatXbox",
+      "Name": "Remove Xbox Apps",
+      "Description": "Removes Xbox-related bundled apps (does not affect ability to play PC games).",
+      "Category": "Debloat",
+      "Apply": [
+        { "Type": "AppxRemove", "Packages": ["Microsoft.XboxApp", "Microsoft.XboxGamingOverlay", "Microsoft.XboxGameOverlay", "Microsoft.XboxIdentityProvider", "Microsoft.XboxSpeechToTextOverlay", "Microsoft.Xbox.TCUI"] }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "Reinstall from Microsoft Store manually; Appx removal is not auto-reversible." }
+      ]
+    },
+    {
+      "Id": "DebloatCortana",
+      "Name": "Remove Cortana",
+      "Description": "Removes the Cortana app and disables its background service.",
+      "Category": "Debloat",
+      "Apply": [
+        { "Type": "AppxRemove", "Packages": ["Microsoft.549981C3F5F10"] }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "Reinstall from Microsoft Store manually; Appx removal is not auto-reversible." }
+      ]
+    },
+    {
+      "Id": "Debloat3DViewer",
+      "Name": "Remove 3D Viewer / Mixed Reality Portal",
+      "Description": "Removes rarely used 3D/mixed reality bundled apps.",
+      "Category": "Debloat",
+      "Apply": [
+        { "Type": "AppxRemove", "Packages": ["Microsoft.Microsoft3DViewer", "Microsoft.MixedRealityPortal"] }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "Reinstall from Microsoft Store manually; Appx removal is not auto-reversible." }
+      ]
+    },
+    {
+      "Id": "DebloatOneDrive",
+      "Name": "Remove OneDrive",
+      "Description": "Uninstalls OneDrive and removes it from File Explorer's sidebar.",
+      "Category": "Debloat",
+      "Apply": [
+        { "Type": "Command", "Command": "Stop-Process -Name OneDrive -Force -ErrorAction SilentlyContinue; Start-Process \"$env:SystemRoot\\SysWOW64\\OneDriveSetup.exe\" -ArgumentList '/uninstall' -Wait -ErrorAction SilentlyContinue" }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "Download and reinstall OneDrive from microsoft.com if needed." }
+      ]
+    },
+    {
+      "Id": "DebloatBingApps",
+      "Name": "Remove Bing-Integrated Apps",
+      "Description": "Removes Bing News, Weather, and Finance bundled apps.",
+      "Category": "Debloat",
+      "Apply": [
+        { "Type": "AppxRemove", "Packages": ["Microsoft.BingNews", "Microsoft.BingWeather", "Microsoft.BingFinance"] }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "Reinstall from Microsoft Store manually; Appx removal is not auto-reversible." }
+      ]
+    },
+    {
+      "Id": "DebloatEdgeWarning",
+      "Name": "Remove Microsoft Edge (Advanced/Risky)",
+      "Description": "WARNING: Removing Edge can break some WebView2-dependent apps and Windows components. Only use if you understand the risk.",
+      "Category": "Debloat",
+      "RequiresConfirmation": true,
+      "Apply": [
+        { "Type": "Command", "Command": "& \"${env:ProgramFiles(x86)}\\Microsoft\\Edge\\Application\\*\\Installer\\setup.exe\" --uninstall --system-level --verbose-logging --force-uninstall" }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "Reinstall Edge from microsoft.com/edge if needed." }
+      ]
+    }
+  ],
+  "Updates": [
+    {
+      "Id": "UpdatesDisableAuto",
+      "Name": "Disable Automatic Windows Updates",
+      "Description": "Sets Windows Update service to manual start, stopping automatic background updates.",
+      "Category": "Updates",
+      "Apply": [
+        { "Type": "Service", "Name": "wuauserv", "Action": "Manual" }
+      ],
+      "Undo": [
+        { "Type": "Service", "Name": "wuauserv", "Action": "Automatic" }
+      ]
+    },
+    {
+      "Id": "UpdatesEnableDriverUpdates",
+      "Name": "Enable Optional Driver Updates via Windows Update",
+      "Description": "Allows Windows Update to also offer optional driver updates.",
+      "Category": "Updates",
+      "Apply": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching", "Name": "SearchOrderConfig", "Value": 1, "ValueType": "DWord" }
+      ],
+      "Undo": [
+        { "Type": "Registry", "Path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching", "Name": "SearchOrderConfig", "Value": 0, "ValueType": "DWord" }
+      ]
+    },
+    {
+      "Id": "UpdatesResetComponents",
+      "Name": "Reset Windows Update Components",
+      "Description": "Stops update services, clears the SoftwareDistribution cache, and restarts services — fixes many stuck-update issues.",
+      "Category": "Updates",
+      "RequiresConfirmation": true,
+      "Apply": [
+        { "Type": "Command", "Command": "Stop-Service wuauserv,bits,cryptsvc -Force; Rename-Item \"$env:windir\\SoftwareDistribution\" \"SoftwareDistribution.bak\" -ErrorAction SilentlyContinue; Start-Service wuauserv,bits,cryptsvc" }
+      ],
+      "Undo": [
+        { "Type": "Note", "Message": "This action is not reversible; a fresh SoftwareDistribution folder will be recreated automatically." }
+      ]
+    }
+  ]
+}
